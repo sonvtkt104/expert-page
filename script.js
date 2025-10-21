@@ -1,47 +1,87 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const mainImage = document.getElementById('main-journey-image');
-    const thumbnails = document.querySelectorAll('.expert-thumbnail-item');
-    let currentIndex = 0;
-    let intervalId;
+document.addEventListener('DOMContentLoaded', function () {
+  const track = document.getElementById('journey-track');
+  const thumbs = Array.from(document.querySelectorAll('.expert-thumbnail-item'));
+  const viewport = track.parentElement;
 
-    // Hàm để cập nhật ảnh chính và thumbnail active
-    function updateImage(index) {
-        // Cập nhật ảnh chính
-        mainImage.style.opacity = '0';
-        setTimeout(() => {
-            mainImage.src = thumbnails[index].src;
-            mainImage.style.opacity = '1';
-        }, 300); // Đợi hiệu ứng mờ kết thúc rồi mới đổi ảnh
+  const sources = thumbs.map(t => t.src);
+  let currentIndex = 1;          // bắt đầu ở slide thực đầu tiên (sau clone)
+  let slideWidth = 0;
+  let timer;
 
-        // Cập nhật trạng thái active cho thumbnail
-        thumbnails.forEach(thumb => thumb.classList.remove('active-thumbnail'));
-        thumbnails[index].classList.add('active-thumbnail');
-        currentIndex = index;
-    }
-
-    // Xử lý khi click vào thumbnail
-    thumbnails.forEach((thumbnail, index) => {
-        thumbnail.addEventListener('click', () => {
-            updateImage(index);
-            // Reset lại bộ đếm thời gian tự động chuyển
-            resetInterval();
-        });
+  // Dựng slide: clone cuối lên đầu & đầu xuống cuối để loop mượt
+  function buildSlides() {
+    track.innerHTML = '';
+    const extended = [sources[sources.length - 1], ...sources, sources[0]];
+    extended.forEach(src => {
+      const slide = document.createElement('div');
+      slide.className = 'expert-slide';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Journey slide';
+      slide.appendChild(img);
+      track.appendChild(slide);
     });
+  }
 
-    // Hàm tự động chuyển ảnh
-    function startInterval() {
-        intervalId = setInterval(() => {
-            let nextIndex = (currentIndex + 1) % thumbnails.length;
-            updateImage(nextIndex);
-        }, 3000); // 3000ms = 3 giây
+  function setSizes() {
+    slideWidth = viewport.clientWidth;
+    // đặt start position tại index 1 (slide thực đầu)
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    // force reflow để transition lần sau hoạt động
+    track.getBoundingClientRect();
+    track.style.transition = 'transform .6s ease';
+  }
+
+  function updateActiveThumb() {
+    thumbs.forEach(t => t.classList.remove('active-thumbnail'));
+    thumbs[(currentIndex - 1 + sources.length) % sources.length].classList.add('active-thumbnail');
+  }
+
+  function goTo(index) {
+    currentIndex = index;
+    track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+  }
+
+  function next() { goTo(currentIndex + 1); }
+
+  // Khi kết thúc transition: nếu đang ở clone thì nhảy về slide thực tương ứng mà không transition
+  track.addEventListener('transitionend', () => {
+    if (currentIndex === 0) {
+      track.style.transition = 'none';
+      currentIndex = sources.length;
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+      track.getBoundingClientRect();
+      track.style.transition = 'transform .6s ease';
+    } else if (currentIndex === sources.length + 1) {
+      track.style.transition = 'none';
+      currentIndex = 1;
+      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+      track.getBoundingClientRect();
+      track.style.transition = 'transform .6s ease';
     }
+    updateActiveThumb();
+  });
 
-    // Hàm reset bộ đếm
-    function resetInterval() {
-        clearInterval(intervalId);
-        startInterval();
-    }
+  // Auto slide 3s
+  function start() { timer = setInterval(next, 3000); }
+  function reset() { clearInterval(timer); start(); }
 
-    // Bắt đầu tự động chuyển ảnh khi tải trang
-    startInterval();
+  // Click thumbnail để nhảy tới ảnh tương ứng
+  thumbs.forEach((t, i) => {
+    t.addEventListener('click', () => { goTo(i + 1); reset(); });
+  });
+
+  // Pause khi hover (tuỳ chọn – có thể bỏ)
+  viewport.addEventListener('mouseenter', () => clearInterval(timer));
+  viewport.addEventListener('mouseleave', start);
+
+  // Init
+  buildSlides();
+  setSizes();
+  updateActiveThumb();
+  start();
+
+  // Responsive: recalculation khi resize
+  window.addEventListener('resize', setSizes);
 });

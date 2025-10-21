@@ -25,7 +25,7 @@ body {
 .expert-container {
     max-width: 1370px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
 }
 
 .expert-profile p:last-child {
@@ -70,8 +70,8 @@ body {
 
 .expert-badge {
     position: absolute;
-    top: 30px;
-    right: 40px;
+    top: 40px;
+    right: 80px;
     width: 60px;
 }
 
@@ -196,8 +196,7 @@ body {
 
 /* --- PHẦN HÀNH TRÌNH --- */
 .expert-journey-section {
-    padding: 100px 0;
-    background-color: #f9fafb;
+    padding: 20px 0;
 }
 
 .expert-journey-content {
@@ -223,15 +222,17 @@ body {
     display: flex;
     gap: 16px;
     margin-top: 15px;
+    overflow: auto;
 }
 
 .expert-thumbnail-item {
     width: 100px;
-    height: 100px;
+    height: 100px !important;
     border-radius: 20px;
     cursor: pointer;
     border: 3px solid transparent;
-    transition: all 0.3s ease;
+    object-fit: cover;
+    min-width: 100px;
 }
 
 .expert-thumbnail-item.active-thumbnail {
@@ -245,6 +246,30 @@ body {
 .expert-h5 {
     font-size: 1.5rem;
     margin-top: 30px;
+}
+
+.expert-journey-viewport{
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.expert-journey-track{
+  display: flex;
+  will-change: transform;
+  transition: transform .6s ease; /* tốc độ trượt */
+}
+
+.expert-slide{
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.expert-slide img{
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
 }
 
 /* --- PHẦN SỰ KIỆN --- */
@@ -261,6 +286,7 @@ body {
     bottom: 0px;
     z-index: -1;
     opacity: 0.8;
+    max-width: 100%;
 }
 .expert-event-decor-2 {
     position: absolute;
@@ -268,6 +294,7 @@ body {
     top: 0px;
     z-index: -1;
     opacity: 0.8;
+    max-width: 100%;
 }
 
 .expert-events-section .expert-h3 {
@@ -308,18 +335,48 @@ body {
     width: 100%;
 }
 
+@media (min-width: 1600px) {
+    .expert-about-content, .expert-journey-content {
+        gap: 120px;
+    }
+}
+@media (max-width: 1300px) {
+    .expert-h1 { font-size: 6rem; }
+    .expert-badge {
+        top: 30px;
+        right: 60px;
+    }
+    .expert-about-section {
+        padding: 70px 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    .expert-about-content, .expert-journey-content {
+        gap: 40px;
+    }
+    .expert-h1 { font-size: 5rem; }
+}
+
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 992px) {
     .expert-hero-content, .expert-about-content, .expert-journey-content {
         flex-direction: column;
         text-align: center;
     }
+    .expert-about-section {
+        padding: 50px 0;
+    }
+    .expert-badge {
+        top: 20px;
+        right: 20px;
+    }
     
     .expert-journey-content {
         flex-direction: column-reverse;
     }
     .expert-hero-image, .expert-about-image, .expert-journey-gallery {
-        margin-top: 40px;
+        margin-top: 10px;
         width: 100%;
         max-width: 500px;
         margin-left: auto;
@@ -327,12 +384,15 @@ body {
     }
     .expert-quote { margin-left: auto; margin-right: auto; }
     .expert-expertise { justify-content: center; }
+    .expert-event-decor-1, .expert-event-decor-2 {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
-    .expert-h1 { font-size: 2.5rem; }
-    .expert-h2 { font-size: 2.2rem; }
-    .expert-h3, .expert-events-section .expert-h4 { font-size: 2rem; }
+    .expert-h1 { font-size: 3.5rem; }
+    .expert-h2 { font-size: 2.8em; }
+    .expert-h3, .expert-events-section .expert-h4, .expert-events-section .expert-h3 { font-size: 2rem; }
     .expert-journey-text .expert-h4 { font-size: 1.8rem; }
     
     .expert-events-gallery { flex-direction: column; }
@@ -341,5 +401,21 @@ body {
 
     .expert-hero-text {
         padding-top: 20px;
+    }
+}
+@media (max-width: 527px) {
+    .expert-hero-section {
+        padding-top: 30px;
+    }
+    .expert-badge {
+        width: 40px;
+        top: 10px;
+        right: 10px;
+    }
+    .expert-h1 { font-size: 3rem; }
+    .expert-thumbnail-item {
+        width: 90px;
+        height: 90px !important;
+        min-width: 90px !important;
     }
 }
