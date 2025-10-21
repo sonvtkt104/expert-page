@@ -1,17 +1,8 @@
 /* --- CÀI ĐẶT CHUNG --- */
 :root {
-    --expert-primary-orange: #FF983E;
-    --expert-dark-blue: #0e1f40;
-    --expert-text-light: #ffffff;
     --expert-text-dark: #333333;
     --expert-background-light: #fff;
     --expert-font-family: 'Poppins', sans-serif;
-}
-
-.expert-profile, .expert-profile * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -20,6 +11,12 @@ body {
     background-color: var(--expert-background-light);
     line-height: 1.6;
     margin: 0px;
+}
+
+.expert-profile, .expert-profile * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .expert-container {
@@ -108,7 +105,6 @@ body {
 
 .expert-linkedin-btn {
     display: inline-block;
-    color: #FFFFFF;
     padding: 4.5px 23px;
     border-radius: 50px;
     text-decoration: none;
@@ -116,6 +112,7 @@ body {
     border: 1px solid #FFFFFF;
     font-size: 1.2rem;
     background: #FFFFFF40;
+    color: #FFFFFF !important;
 }
 .expert-hero-blur {
     position: absolute;
@@ -174,7 +171,7 @@ body {
 }
 
 .expert-h3 strong {
-    color: var(--expert-primary-orange);
+    color: var(#FF983E);
     font-weight: 600;
 }
 
@@ -303,7 +300,7 @@ body {
 }
 
 .expert-events-section strong {
-    color: var(--expert-primary-orange);
+    color: var(#FF983E);
 }
 
 .expert-events-gallery {
